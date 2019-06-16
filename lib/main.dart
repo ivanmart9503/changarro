@@ -1,7 +1,6 @@
 import 'package:changarro/src/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import './src/helpers/themes.dart';
 
 void main() => runApp(Changarro());
 
