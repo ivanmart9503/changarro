@@ -1,6 +1,10 @@
-import 'package:changarro/src/home.dart';
+import 'package:changarro/src/providers/lista_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+
+import 'package:changarro/src/home.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(Changarro());
 
@@ -16,17 +20,22 @@ class Changarro extends StatelessWidget {
         systemNavigationBarIconBrightness: Brightness.dark,
       ),
     );
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Abarrotes Doña Brisia',
-      theme: ThemeData(
-        primaryColor: Colors.pink.shade200,
-        accentColor: Colors.pink.shade100,
-        backgroundColor: Colors.orange.shade50,
-        fontFamily: 'Karla',
-        appBarTheme: AppBarTheme(elevation: 0.0),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(builder: (context) => ListaProvider())
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Abarrotes Doña Brisia',
+        theme: ThemeData(
+          primaryColor: Colors.pink.shade200,
+          accentColor: Colors.pink.shade100,
+          backgroundColor: Colors.orange.shade50,
+          fontFamily: 'Karla',
+          appBarTheme: AppBarTheme(elevation: 0.0),
+        ),
+        home: Home(),
       ),
-      home: Home(),
     );
   }
 }

@@ -2,9 +2,12 @@ import 'package:changarro/src/providers/lista_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class DialogoDeuda {
-  String _persona = '';
+class DialogoCambiarDeuda {
   String _deuda = '';
+  final String _nombre;
+  final String _deudaVieja;
+
+  DialogoCambiarDeuda(this._nombre, this._deudaVieja);
 
   void mostrarDialogo(BuildContext context) {
     showDialog(
@@ -16,16 +19,34 @@ class DialogoDeuda {
   Widget _buildTitulo(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text(
-          'Agregar a la lista negra',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 18.0,
-            color: Theme.of(context).primaryColor,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Modificar deuda de ',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            Text(
+              _nombre,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
         SizedBox(
-          height: 5.0,
+          height: 1.0,
+        ),
+        Text(
+          'Actualmente debe: \$$_deudaVieja',
+          style: TextStyle(fontSize: 16.0),
+          textAlign: TextAlign.center,
         ),
         Divider(
           color: Colors.grey,
@@ -34,17 +55,14 @@ class DialogoDeuda {
     );
   }
 
-  List<Widget> _buildContenido(BuildContext context, ListaProvider listado) {
+  List<Widget> _buildContenido(BuildContext context) {
+    final listado = Provider.of<ListaProvider>(context);
     return [
       Column(
         children: <Widget>[
           TextField(
-            decoration: InputDecoration(labelText: 'Nombre'),
-            onChanged: (value) => _persona = value,
-          ),
-          TextField(
             decoration: InputDecoration(
-              labelText: 'Deuda',
+              labelText: 'Nueva deuda',
               prefixText: '\$',
             ),
             keyboardType: TextInputType.number,
@@ -54,14 +72,14 @@ class DialogoDeuda {
             height: 30.0,
           ),
           RaisedButton(
-            child: Text('Agregar'),
+            child: Text('Actualizar'),
             color: Theme.of(context).primaryColor,
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
             onPressed: () {
-              listado.escribirDatos(_persona, _deuda);
+              listado.modificarDeuda(_nombre, _deuda);
               Navigator.of(context).pop();
             },
           ),
@@ -71,7 +89,6 @@ class DialogoDeuda {
   }
 
   SimpleDialog _buildDialogo(BuildContext context) {
-    final listado = Provider.of<ListaProvider>(context);
     return SimpleDialog(
       backgroundColor: Theme.of(context).backgroundColor,
       titlePadding:
@@ -82,7 +99,7 @@ class DialogoDeuda {
         borderRadius: BorderRadius.circular(10.0),
       ),
       title: _buildTitulo(context),
-      children: _buildContenido(context, listado),
+      children: _buildContenido(context),
     );
   }
 }
